@@ -41,3 +41,29 @@ jobs:
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
           GGDEALS_API_KEY: ${{ secrets.GGDEALS_API_KEY }}
         run: python main.py
+
+      - name: Database summary
+        if: always()
+        run: |
+          python -c "
+          from pathlib import Path
+          db = Path('data/prices.db')
+          if not db.exists():
+              print('No database found.')
+          else:
+              import sqlite3
+              conn = sqlite3.connect(db)
+              print('Games:    ', conn.execute('SELECT COUNT(*) FROM games').fetchone()[0])
+              print('Snapshots:', conn.execute('SELECT COUNT(*) FROM price_snapshots').fetchone()[0])
+              print('Notifications:', conn.execute('SELECT COUNT(*) FROM notifications').fetchone()[0])
+              print('Sources:  ', [r[0] for r in conn.execute('SELECT DISTINCT source FROM price_snapshots').fetchall()])
+              conn.close()
+          "
+
+      - name: Upload database artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: prices-db
+          path: data/prices.db
+          retention-days: 7
