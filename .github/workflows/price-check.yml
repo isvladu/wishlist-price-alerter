@@ -33,7 +33,7 @@ jobs:
         run: mkdir -p data
 
       - name: Write config.json from secret
-        run: echo '${{ secrets.CONFIG }}' > config.json
+        run: printf '%s' '${{ secrets.CONFIG }}' > config.json
 
       - name: Run price check
         env:
