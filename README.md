@@ -74,7 +74,7 @@ Edit `config.json` to adjust thresholds:
   "discount_threshold": 0.80,
   "price_history_days": 90,
   "notification_cooldown_hours": 48,
-  "schedule_interval_hours": 6,
+  "schedule_interval_hours": 12,
   "sources": ["ggdeals", "allkeyshop"]
 }
 ```
@@ -84,7 +84,7 @@ Edit `config.json` to adjust thresholds:
 | `discount_threshold` | Alert when price ≤ this fraction of the 90-day average | `0.80` (20% below avg) |
 | `price_history_days` | Rolling window used to compute average and minimum | `90` |
 | `notification_cooldown_hours` | Minimum hours between repeat alerts for the same game | `48` |
-| `schedule_interval_hours` | How often the scheduler runs a check | `6` |
+| `schedule_interval_hours` | How often the scheduler runs a check | `12` |
 | `sources` | Which price sources to query | `["ggdeals", "allkeyshop"]` |
 
 ---
@@ -97,7 +97,7 @@ Edit `config.json` to adjust thresholds:
 python main.py
 ```
 
-**Run on a recurring schedule (every 6 hours):**
+**Run on a recurring schedule (every 12 hours):**
 
 ```bash
 python scheduler.py
@@ -112,7 +112,7 @@ Leave `scheduler.py` running as a background process. Alternatively, use Windows
 ```
 wishlist-price-alerter/
 ├── main.py                  # Orchestrator — runs one full check cycle
-├── scheduler.py             # APScheduler wrapper (every 6h)
+├── scheduler.py             # APScheduler wrapper (every 12h)
 ├── config.example.json      # Settings template
 ├── .env.example             # Secrets template
 ├── requirements.txt

@@ -1,8 +1,8 @@
 {
-  "discount_threshold": 0.80,
+  "discount_threshold": 0.8,
   "price_history_days": 90,
   "notification_cooldown_hours": 48,
-  "schedule_interval_hours": 6,
+  "schedule_interval_hours": 12,
   "sources": ["ggdeals", "allkeyshop"],
   "currency": "USD"
 }
