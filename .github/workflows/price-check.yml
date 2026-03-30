@@ -1,0 +1,43 @@
+name: Wishlist Price Check
+
+on:
+  schedule:
+    - cron: '0 */6 * * *'  # every 6 hours
+  workflow_dispatch:        # allow manual trigger from the Actions tab
+
+jobs:
+  check-prices:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Restore price database
+        uses: actions/cache@v4
+        with:
+          path: data/prices.db
+          # New cache entry per run; restore-keys picks up the most recent existing one
+          key: prices-db-${{ github.run_id }}
+          restore-keys: prices-db-
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Create data directory
+        run: mkdir -p data
+
+      - name: Create config.json from example
+        run: cp config.example.json config.json
+
+      - name: Run price check
+        env:
+          STEAM_ID_64: ${{ secrets.STEAM_ID_64 }}
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          GGDEALS_API_KEY: ${{ secrets.GGDEALS_API_KEY }}
+        run: python main.py
