@@ -32,8 +32,8 @@ jobs:
       - name: Create data directory
         run: mkdir -p data
 
-      - name: Create config.json from example
-        run: cp config.example.json config.json
+      - name: Write config.json from secret
+        run: echo '${{ secrets.CONFIG }}' > config.json
 
       - name: Run price check
         env:
