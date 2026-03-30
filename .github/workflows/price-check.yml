@@ -35,7 +35,18 @@ jobs:
       - name: Write config.json from secret
         env:
           CONFIG: ${{ secrets.CONFIG }}
-        run: python -c "import os; open('config.json','w').write(os.environ['CONFIG'])"
+        run: |
+          python -c "
+          import os, json
+          raw = os.environ['CONFIG']
+          print(f'Raw value: {repr(raw)}')
+          try:
+              json.loads(raw)
+              print('JSON is valid')
+          except json.JSONDecodeError as e:
+              print(f'JSON error: {e}')
+          open('config.json','w').write(raw)
+          "
 
       - name: Run price check
         env:
