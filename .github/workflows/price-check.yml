@@ -33,7 +33,9 @@ jobs:
         run: mkdir -p data
 
       - name: Write config.json from secret
-        run: printf '%s' '${{ secrets.CONFIG }}' > config.json
+        env:
+          CONFIG: ${{ secrets.CONFIG }}
+        run: python -c "import os; open('config.json','w').write(os.environ['CONFIG'])"
 
       - name: Run price check
         env:
