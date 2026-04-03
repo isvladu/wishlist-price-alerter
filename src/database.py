@@ -62,16 +62,6 @@ def init_db() -> None:
                 deleted_snapshots, deleted_notifications,
             )
 
-        # Migration 2: clear all notifications — they were logged before Discord
-        # delivery was confirmed, so they may have suppressed alerts incorrectly.
-        purged = conn.execute("DELETE FROM notifications").rowcount
-        if purged:
-            import logging
-            logging.getLogger(__name__).info(
-                "Migration: purged %d unconfirmed notification(s). "
-                "Deals will re-trigger on the next run.",
-                purged,
-            )
 
 
 def upsert_game(appid: int, name: str) -> None:
